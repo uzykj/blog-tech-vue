@@ -1,0 +1,11 @@
+.hover_title:hover {
+    transition: 0.5s;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.hover_name:hover {
+    transition: 0.5s;
+    color: #1976d2 !important;
+    cursor: pointer;
+}

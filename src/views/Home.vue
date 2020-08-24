@@ -1,51 +1,5 @@
 <template>
-  <v-app id="inspire">
-    <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" app>
-      <v-list dense>
-        <v-list-item-group v-model="item" color="primary">
-          <template v-for="item in items">
-            <v-row v-if="item.heading" :key="item.heading" align="center">
-              <v-col cols="6">
-                <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
-              </v-col>
-              <v-col cols="6" class="text-center">
-                <a href="#!" class="body-2 black--text">EDIT</a>
-              </v-col>
-            </v-row>
-            <v-list-group
-              v-else-if="item.children"
-              :key="item.text"
-              v-model="item.model"
-              :prepend-icon="item.model ? item.icon : item['icon-alt']"
-              append-icon
-            >
-              <template v-slot:activator>
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.text }}</v-list-item-title>
-                </v-list-item-content>
-              </template>
-              <v-list-item v-for="(child, i) in item.children" :key="i" link>
-                <v-list-item-action v-if="child.icon">
-                  <v-icon>{{ child.icon }}</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                  <v-list-item-title>{{ child.text }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-group>
-            <v-list-item v-else :key="item.text" link>
-              <v-list-item-action>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>{{ item.text }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
-
+ <div>
     <v-main>
       <!--轮播图容器 -->
       <v-container fluid>
@@ -183,34 +137,21 @@
 
       <!--end -->
     </v-main>
-
-    <v-footer padless app>
-      <v-col class="text-center" cols="12">
-        {{ new Date().getFullYear() }} —
-        <strong>Blog Tech</strong>
-      </v-col>
-    </v-footer>
-  </v-app>
+ </div>
 </template>
 
 <script lang="ts">
 import _ from "lodash";
-import {
-  mdiCardSearch,
-  mdiNewspaper,
-  mdiMovie,
-  mdiMusic,
-  mdiLogin,
-  mdiLogout,
-  mdiMessage,
-  mdiMathLog,
-} from "@mdi/js";
 import moment from "moment";
 import axios from "axios";
 import { Component, Vue, Watch } from "vue-property-decorator";
+import { HotInfo } from "@/interfaces/hotInfo";
 
 @Component({
   name: "Home",
+  components:{
+
+  }
 })
 export default class Home extends Vue {
   created() {
@@ -299,51 +240,7 @@ export default class Home extends Vue {
     });
   }
 
-  private item = -1;
-
   private maxHotIntoHeight = 600;
-
-  private icons = {
-    mdiCardSearch,
-    mdiNewspaper,
-    mdiMovie,
-    mdiMusic,
-    mdiLogin,
-    mdiLogout,
-    mdiMessage,
-    mdiMathLog,
-  };
-
-  private items = [
-    { icon: this.icons.mdiLogin, text: "Login" },
-    { icon: this.icons.mdiCardSearch, text: "Search" },
-    { icon: this.icons.mdiNewspaper, text: "News 2020" },
-    {
-      icon: this.icons.mdiMovie,
-      "icon-alt": this.icons.mdiMovie,
-      text: "Movie",
-      model: false,
-      children: [{ icon: "mdi-plus", text: "Create label" }],
-    },
-    {
-      icon: this.icons.mdiMusic,
-      "icon-alt": this.icons.mdiMusic,
-      text: "Music",
-      model: false,
-      children: [
-        { text: "Import" },
-        { text: "Export" },
-        { text: "Print" },
-        { text: "Undo changes" },
-        { text: "Other contacts" },
-      ],
-    },
-    { icon: this.icons.mdiMathLog, text: "Log" },
-    { icon: this.icons.mdiMessage, text: "Message" },
-    { icon: "mdi-help-circle", text: "Help" },
-    { icon: this.icons.mdiLogout, text: "Exit" },
-    { icon: "mdi-cog", text: "Settings" },
-  ];
 
   titleClick() {
     alert("---");
@@ -371,13 +268,4 @@ export default class Home extends Vue {
   private infoList: Array<HotInfo> = [];
 }
 
-interface HotInfo {
-  title: string;
-  content: string;
-  name: string;
-  subtitle: string;
-  image: string;
-  date: string;
-  text: string;
-}
 </script>

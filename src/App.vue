@@ -1,9 +1,30 @@
 <template>
-  <div id="app">
-    <router-link to="/"></router-link>
+  <v-app id="app">
+    <AppBar />
     <router-view />
-  </div>
+    <Foot />
+  </v-app>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+
+// 左侧导航栏
+import AppBar  from "@/views/Bar.vue";
+
+// 页脚
+import Foot from "@/views/Foot.vue";
+
+@Component({
+  name: "App",
+  components: {
+    AppBar,
+    Foot
+  }
+})
+export default class App extends Vue{}
+
+</script>
 
 <style lang="scss">
 #app {

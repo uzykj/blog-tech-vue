@@ -1,5 +1,51 @@
 <template>
- <div>
+  <v-app id="inspire">
+    <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" app>
+      <v-list dense>
+        <v-list-item-group v-model="item" color="primary">
+          <template v-for="item in items">
+            <v-row v-if="item.heading" :key="item.heading" align="center">
+              <v-col cols="6">
+                <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
+              </v-col>
+              <v-col cols="6" class="text-center">
+                <a href="#!" class="body-2 black--text">EDIT</a>
+              </v-col>
+            </v-row>
+            <v-list-group
+              v-else-if="item.children"
+              :key="item.text"
+              v-model="item.model"
+              :prepend-icon="item.model ? item.icon : item['icon-alt']"
+              append-icon
+            >
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.text }}</v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <v-list-item v-for="(child, i) in item.children" :key="i" link>
+                <v-list-item-action v-if="child.icon">
+                  <v-icon>{{ child.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>{{ child.text }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+            <v-list-item v-else :key="item.text" link>
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ item.text }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+
     <v-main>
       <!--轮播图容器 -->
       <v-container fluid>
@@ -137,77 +183,66 @@
 
       <!--end -->
     </v-main>
- </div>
+
+    <v-footer padless app>
+      <v-col class="text-center" cols="12">
+        {{ new Date().getFullYear() }} —
+        <strong>Blog Tech</strong>
+      </v-col>
+    </v-footer>
+  </v-app>
 </template>
 
 <script lang="ts">
 import _ from "lodash";
-import moment from "moment";
+import {
+  mdiCardSearch,
+  mdiNewspaper,
+  mdiMovie,
+  mdiMusic,
+  mdiLogin,
+  mdiLogout,
+  mdiMessage,
+  mdiMathLog,
+} from "@mdi/js";
 import axios from "axios";
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { HotInfo } from "@/interfaces/hotInfo";
+import { Tech } from "@/interfaces/tech";
 
 @Component({
   name: "Home",
-  components:{
-
-  }
 })
 export default class Home extends Vue {
   created() {
-    axios.get(this.getInfoListUrl()).then((v) => {
+    axios.get<Tech[]>(this.getTechUrl()).then((v) => {
       console.log(v);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data = v.data as any[];
+      const data = v.data;
       const hotinfo = data.shift();
-      this.hotInfo = {
-        title: hotinfo?.title?.rendered,
-        content: hotinfo?.content?.rendered,
-        name: hotinfo?._embedded?.author[0]?.name,
-        subtitle: hotinfo?.subtitle,
-        image: hotinfo?.jetpack_featured_media_url,
-        date: moment(hotinfo?.date).format("YYYY-MM-DD HH:mm"),
-        text: hotinfo?.excerpt?.rendered,
-      };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      this.hotInfoList = this.transformationInfoList(_.slice(data, 0, 5));
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      this.infoList = _.slice(data, 5, data.length).map((v: any) => {
-        return {
-          title: v?.title?.rendered,
-          content: v?.content?.rendered,
-          name: v?._embedded?.author[0]?.name,
-          subtitle: v?.subtitle,
-          image: v?.jetpack_featured_media_url,
-          date: moment(v?.date).format("YYYY-MM-DD HH:mm"),
-          text: v?.excerpt?.rendered,
+      if (hotinfo) {
+        this.hotInfo = {
+          title: hotinfo.title,
+          content: hotinfo.content,
+          name: hotinfo.name,
+          subtitle: hotinfo?.subtitle,
+          image: hotinfo.imageSrc,
+          date: hotinfo.date,
+          text: hotinfo.text,
         };
-      });
+      }
+
+      // 主页侧边五条
+      this.hotInfoList = _.slice(data, 0, 5);
+      // 主页剩余条数
+      this.infoList = _.slice(data, 5, data.length);
     });
   }
 
   private isActive = false;
 
   private page = 1;
-  getInfoListUrl(): string {
-    return `https://techcrunch.com/wp-json/tc/v1/magazine?page=${this.page}&_embed=true&cachePrevention=0`;
-  }
-
-  // 转化咨询列表
-  transformationInfoList(data: unknown[]) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const maps = data.map((v: any) => {
-      return {
-        title: v?.title?.rendered,
-        content: v?.content?.rendered,
-        name: v?._embedded?.author[0]?.name,
-        subtitle: v?.subtitle,
-        image: v?.jetpack_featured_media_url,
-        date: moment(v?.date).format("YYYY-MM-DD HH:mm"),
-        text: v?.excerpt?.rendered,
-      };
-    });
-    return maps;
+  getTechUrl(): string {
+    return `http://localhost:3000/tech/get?page=${this.page}&limit=20`;
   }
 
   // 控制进度圈
@@ -234,13 +269,57 @@ export default class Home extends Vue {
 
   getMoreInfo(): void {
     this.page += 1;
-    axios.get(this.getInfoListUrl()).then(({ data }) => {
-      this.infoList = [...this.infoList, ...this.transformationInfoList(data)];
+    axios.get<Tech[]>(this.getTechUrl()).then(({ data }) => {
+      this.infoList = [...this.infoList, ...data];
       this.isShowLoad = !this.isShowLoad;
     });
   }
 
+  private item = -1;
+
   private maxHotIntoHeight = 600;
+
+  private icons = {
+    mdiCardSearch,
+    mdiNewspaper,
+    mdiMovie,
+    mdiMusic,
+    mdiLogin,
+    mdiLogout,
+    mdiMessage,
+    mdiMathLog,
+  };
+
+  private items = [
+    { icon: this.icons.mdiLogin, text: "Login" },
+    { icon: this.icons.mdiCardSearch, text: "Search" },
+    { icon: this.icons.mdiNewspaper, text: "News 2020" },
+    {
+      icon: this.icons.mdiMovie,
+      "icon-alt": this.icons.mdiMovie,
+      text: "Movie",
+      model: false,
+      children: [{ icon: "mdi-plus", text: "Create label" }],
+    },
+    {
+      icon: this.icons.mdiMusic,
+      "icon-alt": this.icons.mdiMusic,
+      text: "Music",
+      model: false,
+      children: [
+        { text: "Import" },
+        { text: "Export" },
+        { text: "Print" },
+        { text: "Undo changes" },
+        { text: "Other contacts" },
+      ],
+    },
+    { icon: this.icons.mdiMathLog, text: "Log" },
+    { icon: this.icons.mdiMessage, text: "Message" },
+    { icon: "mdi-help-circle", text: "Help" },
+    { icon: this.icons.mdiLogout, text: "Exit" },
+    { icon: "mdi-cog", text: "Settings" },
+  ];
 
   titleClick() {
     alert("---");
@@ -262,10 +341,9 @@ export default class Home extends Vue {
   };
 
   // 热点咨询侧列表
-  private hotInfoList: Array<HotInfo> = [];
+  private hotInfoList: Array<Tech> = [];
 
   // 资讯列表
-  private infoList: Array<HotInfo> = [];
+  private infoList: Array<Tech> = [];
 }
-
 </script>

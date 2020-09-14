@@ -59,7 +59,7 @@
           <v-carousel-item v-for="(v, i) in hotInfoList" :key="i">
             <v-sheet height="100%">
               <v-row class="fill-height" align="center" justify="center">
-                <v-img :src="v.image"></v-img>
+                <v-img :src="v.imageSrc"></v-img>
               </v-row>
             </v-sheet>
           </v-carousel-item>
@@ -79,7 +79,7 @@
                 <v-card-subtitle>{{hotInfo.date}}</v-card-subtitle>
                 <v-card-text>
                   <!-- <v-card-subtitle v-html="getsHotInfo.content"></v-card-subtitle> -->
-                  <v-img class="hover_title" height="450" :src="hotInfo.image"></v-img>
+                  <v-img class="hover_title" height="450" :src="hotInfo.imageSrc"></v-img>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -156,7 +156,7 @@
                     <v-sheet v-html="item.text" class="hover_title"></v-sheet>
                   </v-col>
                   <v-col cols="12" lg="4" sm="4" md="4">
-                    <v-img class="hover_title" height="150" width="350" :src="item.image"></v-img>
+                    <v-img class="hover_title" height="150" width="350" :src="item.imageSrc"></v-img>
                   </v-col>
                 </v-row>
                 <v-divider></v-divider>
@@ -225,7 +225,7 @@ export default class Home extends Vue {
           content: hotinfo.content,
           name: hotinfo.name,
           subtitle: hotinfo?.subtitle,
-          image: hotinfo.imageSrc,
+          imageSrc: hotinfo.imageSrc,
           date: hotinfo.date,
           text: hotinfo.text,
         };
@@ -335,7 +335,7 @@ export default class Home extends Vue {
     content: "",
     name: "",
     subtitle: "",
-    image: "",
+    imageSrc: "",
     date: "",
     text: "",
   };

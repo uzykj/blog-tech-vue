@@ -17,7 +17,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
-import { HotInfo } from "@/interfaces/hotInfo";
+import { Tech } from "@/interfaces/tech";
 
 @Component({
   name: "App.carousel",
@@ -31,7 +31,7 @@ export default class Home extends Vue {
   }
 
   // 轮播图列表
-  private carouselList: HotInfo[] = [];
+  private carouselList: Tech[] = [];
 
 }
 </script>>

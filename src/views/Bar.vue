@@ -33,7 +33,7 @@
                 </v-list-item-content>
               </v-list-item>
             </v-list-group>
-            <v-list-item v-else :key="item.text" link>
+            <v-list-item v-else :key="item.text" link @click.stop="drawer = !drawer">
               <v-list-item-action>
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-item-action>
@@ -45,6 +45,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
+
   </div>
 </template>
 
@@ -59,6 +60,11 @@ import {
   mdiLogout,
   mdiMessage,
   mdiMathLog,
+  mdiHome,
+  mdiWechat,
+  mdiQqchat,
+  mdiSinaWeibo,
+  mdiGithub,
 } from "@mdi/js";
 
 @Component({
@@ -77,36 +83,44 @@ export default class Bar extends Vue {
     mdiLogout,
     mdiMessage,
     mdiMathLog,
+    mdiHome,
+    mdiWechat,
+    mdiQqchat,
+    mdiSinaWeibo,
+    mdiGithub
   };
   private items = [
-    { icon: this.icons.mdiLogin, text: "Login" },
-    { icon: this.icons.mdiCardSearch, text: "Search" },
-    { icon: this.icons.mdiNewspaper, text: "News 2020" },
+    { icon: this.icons.mdiHome, text: "Town" },
+    { icon: this.icons.mdiLogin, text: "登录" },
+    { icon: this.icons.mdiCardSearch, text: "搜索" },
+    { icon: this.icons.mdiNewspaper, text: "热点" },
     {
       icon: this.icons.mdiMovie,
       "icon-alt": this.icons.mdiMovie,
-      text: "Movie",
+      text: "电影",
       model: false,
-      children: [{ icon: "mdi-plus", text: "Create label" }],
+      children: [{ icon: "mdi-plus", text: "科幻" }],
     },
     {
       icon: this.icons.mdiMusic,
       "icon-alt": this.icons.mdiMusic,
-      text: "Music",
+      text: "频道",
       model: false,
       children: [
-        { text: "Import" },
-        { text: "Export" },
-        { text: "Print" },
-        { text: "Undo changes" },
-        { text: "Other contacts" },
+        { text: "视频" },
+        { text: "音乐" },
+        { text: "新闻" },
+        { text: "幽默" },
+        { text: "周边" },
       ],
     },
-    { icon: this.icons.mdiMathLog, text: "Log" },
-    { icon: this.icons.mdiMessage, text: "Message" },
-    { icon: "mdi-help-circle", text: "Help" },
-    { icon: this.icons.mdiLogout, text: "Exit" },
-    { icon: "mdi-cog", text: "Settings" },
+    { icon: this.icons.mdiMathLog, text: "日志" },
+    { icon: this.icons.mdiMessage, text: "消息" },
+    { icon: "mdi-help-circle", text: "帮助" },
+    { icon: this.icons.mdiLogout, text: "退出" },
+    { icon: "mdi-cog", text: "设置" },
   ];
+
+  private drawer = true;
 }
 </script>

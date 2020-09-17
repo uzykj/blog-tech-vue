@@ -1,52 +1,9 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" app>
-      <v-list dense>
-        <v-list-item-group v-model="item" color="primary">
-          <template v-for="item in items">
-            <v-row v-if="item.heading" :key="item.heading" align="center">
-              <v-col cols="6">
-                <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
-              </v-col>
-              <v-col cols="6" class="text-center">
-                <a href="#!" class="body-2 black--text">EDIT</a>
-              </v-col>
-            </v-row>
-            <v-list-group
-              v-else-if="item.children"
-              :key="item.text"
-              v-model="item.model"
-              :prepend-icon="item.model ? item.icon : item['icon-alt']"
-              append-icon
-            >
-              <template v-slot:activator>
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.text }}</v-list-item-title>
-                </v-list-item-content>
-              </template>
-              <v-list-item v-for="(child, i) in item.children" :key="i" link>
-                <v-list-item-action v-if="child.icon">
-                  <v-icon>{{ child.icon }}</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                  <v-list-item-title>{{ child.text }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-group>
-            <v-list-item v-else :key="item.text" link>
-              <v-list-item-action>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>{{ item.text }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
-
     <v-main>
+
+      <Login />
+
       <!--轮播图容器 -->
       <v-container fluid>
         <v-carousel
@@ -117,7 +74,7 @@
 
       <v-container>
         <v-card class="mx-auto" style="box-shadow: none;">
-          <v-card-title class="text-h3">The Latest</v-card-title>
+          <v-card-title class="text-h3">最新咨询</v-card-title>
         </v-card>
       </v-container>
 
@@ -183,40 +140,28 @@
 
       <!--end -->
     </v-main>
-
-    <v-footer padless app>
-      <v-col class="text-center" cols="12">
-        {{ new Date().getFullYear() }} —
-        <strong>Blog Tech</strong>
-      </v-col>
-    </v-footer>
   </v-app>
 </template>
 
 <script lang="ts">
 import _ from "lodash";
-import {
-  mdiCardSearch,
-  mdiNewspaper,
-  mdiMovie,
-  mdiMusic,
-  mdiLogin,
-  mdiLogout,
-  mdiMessage,
-  mdiMathLog,
-} from "@mdi/js";
 import axios from "axios";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { Tech } from "@/interfaces/tech";
+import {nest} from '../../server';
+
+// 登录组建
+import Login from '@/views/Login.vue';
 
 @Component({
   name: "Home",
+  components:{
+    Login
+  }
 })
 export default class Home extends Vue {
   created() {
     axios.get<Tech[]>(this.getTechUrl()).then((v) => {
-      console.log(v);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data = v.data;
       const hotinfo = data.shift();
       if (hotinfo) {
@@ -242,7 +187,7 @@ export default class Home extends Vue {
 
   private page = 1;
   getTechUrl(): string {
-    return `http://localhost:3000/tech/get?page=${this.page}&limit=20`;
+    return `http://${nest.host}:${nest.port}/tech/get?page=${this.page}&limit=20`;
   }
 
   // 控制进度圈
@@ -265,7 +210,7 @@ export default class Home extends Vue {
       : this.showLoadJson.noShowLoad;
   }
   private loadMoreText =
-    '<div style="margin: auto"><h1 style="color:#1976d2 !important;">Load More</h1></div>';
+    '<div style="margin: auto"><h1 style="color:#1976d2 !important;">加载更多</h1></div>';
 
   getMoreInfo(): void {
     this.page += 1;
@@ -278,48 +223,6 @@ export default class Home extends Vue {
   private item = -1;
 
   private maxHotIntoHeight = 600;
-
-  private icons = {
-    mdiCardSearch,
-    mdiNewspaper,
-    mdiMovie,
-    mdiMusic,
-    mdiLogin,
-    mdiLogout,
-    mdiMessage,
-    mdiMathLog,
-  };
-
-  private items = [
-    { icon: this.icons.mdiLogin, text: "Login" },
-    { icon: this.icons.mdiCardSearch, text: "Search" },
-    { icon: this.icons.mdiNewspaper, text: "News 2020" },
-    {
-      icon: this.icons.mdiMovie,
-      "icon-alt": this.icons.mdiMovie,
-      text: "Movie",
-      model: false,
-      children: [{ icon: "mdi-plus", text: "Create label" }],
-    },
-    {
-      icon: this.icons.mdiMusic,
-      "icon-alt": this.icons.mdiMusic,
-      text: "Music",
-      model: false,
-      children: [
-        { text: "Import" },
-        { text: "Export" },
-        { text: "Print" },
-        { text: "Undo changes" },
-        { text: "Other contacts" },
-      ],
-    },
-    { icon: this.icons.mdiMathLog, text: "Log" },
-    { icon: this.icons.mdiMessage, text: "Message" },
-    { icon: "mdi-help-circle", text: "Help" },
-    { icon: this.icons.mdiLogout, text: "Exit" },
-    { icon: "mdi-cog", text: "Settings" },
-  ];
 
   titleClick() {
     alert("---");

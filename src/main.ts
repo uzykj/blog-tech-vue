@@ -6,8 +6,8 @@ import router from "./router";
 import store from "./store";
 import Vuetify from "vuetify";
 import 'vuetify/dist/vuetify.min.css';
-import '../public/css/hover.css'
-import '../public/css/card.css'
+import '../public/css/hover.css';
+import '../public/css/card.css';
 
 Vue.config.productionTip = false;
 

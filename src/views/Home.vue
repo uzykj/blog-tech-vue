@@ -74,7 +74,7 @@
 
       <v-container>
         <v-card class="mx-auto" style="box-shadow: none;">
-          <v-card-title class="text-h3">最新咨询</v-card-title>
+          <v-card-title class="text-h3">最新</v-card-title>
         </v-card>
       </v-container>
 

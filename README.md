@@ -1,4 +1,4 @@
-# blog-tech-vue
+# town
 
 ## Project setup
 ```

@@ -13,6 +13,22 @@ Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
 
+// 自定义全局指令
+
+// display控制
+Vue.directive('town-display', {
+  bind(el, bind){
+    if(bind.value){
+      el.style.display = bind.value;
+    }
+  },
+  update(el, bind){
+    if(bind.value){
+      el.style.display = bind.value;
+    }
+  }
+});
+
 new Vue({
   router,
   store,

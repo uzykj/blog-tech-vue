@@ -1,28 +1,8 @@
 <template>
   <v-app id="inspire">
     <v-main>
-
-      <Login />
-
-      <!--轮播图容器 -->
-      <v-container fluid>
-        <v-carousel
-          cycle
-          height="150"
-          hide-delimiter-background
-          show-arrows-on-hover
-          hide-delimiters
-        >
-          <v-carousel-item v-for="(v, i) in hotInfoList" :key="i">
-            <v-sheet height="100%">
-              <v-row class="fill-height" align="center" justify="center">
-                <v-img :src="v.imageSrc"></v-img>
-              </v-row>
-            </v-sheet>
-          </v-carousel-item>
-        </v-carousel>
-      </v-container>
-      <!--end -->
+      <Login :propDrawer="false" />
+      <Carousel />
 
       <!--热点资讯 -->
       <v-container>
@@ -148,16 +128,20 @@ import _ from "lodash";
 import axios from "axios";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { Tech } from "@/interfaces/tech";
-import {nest} from '../../server';
+import { nest } from "../../server";
 
 // 登录组建
-import Login from '@/views/Login.vue';
+import Login from "@/views/Login.vue";
+
+// 轮播图组件
+import Carousel from "@/components/carousel/Carouse.vue";
 
 @Component({
   name: "Home",
-  components:{
-    Login
-  }
+  components: {
+    Login,
+    Carousel,
+  },
 })
 export default class Home extends Vue {
   created() {
@@ -178,6 +162,10 @@ export default class Home extends Vue {
 
       // 主页侧边五条
       this.hotInfoList = _.slice(data, 0, 5);
+
+      // 轮播图数据
+      this.$store.commit("setCarouseList", _.slice(data, 0, 5));
+
       // 主页剩余条数
       this.infoList = _.slice(data, 5, data.length);
     });

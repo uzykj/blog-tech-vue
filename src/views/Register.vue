@@ -1,89 +1,133 @@
 <template>
-  <div>
-    <v-sheet style="position: relative;">
-      <v-navigation-drawer v-model="registerDrawer" temporary right app width="600">
-        <v-sheet width="300" class="mx-auto card_vertical_center">
-          <v-alert
-            dense
-            type="error"
-            transition="scale-transition"
-            :value="alertLogin"
-            text
-          >用户名或密码错误!</v-alert>
-          <div class="text-center mx-auto">
-            <v-card-subtitle class="text-h3">Twon</v-card-subtitle>
-          </div>
-          <v-form v-model="valid" ref="form" lazy-validation>
-            <v-row>
-              <v-col cols="12" lg="12" sm="12" md="12">
-                <v-text-field
-                  label="用户名"
-                  v-model="username"
-                  :rules="[registerRules.usernameRequired, registerRules.usernameCounter, registerRules.username]"
-                  required
-                  hint="用户名仅支持中英文、数字和下划线、中横线"
-                  counter="10"
-                  dense
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" lg="12" sm="12" md="12">
-                <v-text-field
-                  label="密码"
-                  v-model="password"
-                  :rules="[registerRules.passwordRequired, registerRules.passwordCounter, registerRules.password]"
-                  required
-                  :append-icon="showPassWord ? 'mdi-eye' : 'mdi-eye-off'"
-                  :type="showPassWord ? 'text' : 'password'"
-                  @click:append="showPassWord = !showPassWord"
-                  hint="用户密码必须包含大写小写字母、数字、特殊符号"
-                  counter="6"
-                  dense
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" lg="12" sm="12" md="12">
-                <v-text-field
-                  label="手机号"
-                  v-model="mobile"
-                  :rules="[registerRules.mobileRequired, registerRules.mobile]"
-                  required
-                  hint="中国大陆区手机号"
-                  dense
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="5" lg="5" sm="5" md="5">
-                <v-text-field
-                  label="验证码"
-                  v-model="code"
-                  :rules="[registerRules.mobileCodeRequired, registerRules.mobileCodeCounter]"
-                  required
-                  hint="手机短信验证码"
-                  counter="4"
-                  dense
-                ></v-text-field>
-              </v-col>
-              <v-col cols="2" lg="2" sm="2" md="2"></v-col>
-              <v-col cols="4" lg="4" sm="4" md="4">
-                <v-btn @click="getMobileCode()" :disabled="getMobileCodeState">获取验证码</v-btn>
-              </v-col>
-            </v-row>
+  <v-app id="app">
+    <v-main>
+      <v-row>
+        <v-col cols="12" lg="8" sm="8" md="8" style="padding: 0px">
+          <v-img
+            src="https://img.ivsky.com/img/tupian/pre/202003/19/kongbai_xiangzi-001.jpg"
+            width="100%"
+            height="100vh"
+            style="padding: 0px"
+          >
+          </v-img>
+        </v-col>
+        <v-navigation-drawer
+          v-model="registerDrawer"
+          temporary
+          right
+          app
+          width="650"
+          hide-overlay
+          permanent
+          class="card_hide_border"
+        >
+          <v-sheet width="300" class="mx-auto card_vertical_center">
+            <v-alert
+              dense
+              type="error"
+              transition="scale-transition"
+              :value="alertLogin"
+              text
+              >用户名或密码错误!</v-alert
+            >
             <div class="text-center mx-auto">
-              <v-btn color="primary" block @click="register()" :loading="loading">注册</v-btn>
+              <v-card-subtitle class="text-h3">Twon</v-card-subtitle>
             </div>
-          </v-form>
-          <v-card-actions></v-card-actions>
-          <div class="text-center mx-auto">
-            <v-btn color="nomary" block @click="setLoginExistState()">登陆已有帐号</v-btn>
-          </div>
-        </v-sheet>
-      </v-navigation-drawer>
-    </v-sheet>
-  </div>
+            <v-form v-model="valid" ref="form" lazy-validation>
+              <v-row>
+                <v-col cols="12" lg="12" sm="12" md="12">
+                  <v-text-field
+                    label="用户名"
+                    v-model="username"
+                    :rules="[
+                      registerRules.usernameRequired,
+                      registerRules.usernameCounter,
+                      registerRules.username,
+                    ]"
+                    required
+                    hint="用户名仅支持中英文、数字和下划线、中横线"
+                    counter="10"
+                    dense
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" lg="12" sm="12" md="12">
+                  <v-text-field
+                    label="密码"
+                    v-model="password"
+                    :rules="[
+                      registerRules.passwordRequired,
+                      registerRules.passwordCounter,
+                      registerRules.password,
+                    ]"
+                    required
+                    :append-icon="showPassWord ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="showPassWord ? 'text' : 'password'"
+                    @click:append="showPassWord = !showPassWord"
+                    hint="用户密码必须包含大写小写字母、数字、特殊符号"
+                    counter="6"
+                    dense
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" lg="12" sm="12" md="12">
+                  <v-text-field
+                    label="手机号"
+                    v-model="mobile"
+                    :rules="[
+                      registerRules.mobileRequired,
+                      registerRules.mobile,
+                    ]"
+                    required
+                    hint="中国大陆区手机号"
+                    dense
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="5" lg="5" sm="5" md="5">
+                  <v-text-field
+                    label="验证码"
+                    v-model="code"
+                    :rules="[registerRules.mobileCodeCounter]"
+                    required
+                    hint="手机短信验证码"
+                    counter="4"
+                    dense
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="1" lg="1" sm="1" md="1"></v-col>
+                <v-col cols="4" lg="4" sm="4" md="4">
+                  <v-btn
+                    @click="getMobileCode()"
+                    :disabled="getMobileCodeState"
+                    >{{ countDownMessage }}</v-btn
+                  >
+                </v-col>
+              </v-row>
+              <div class="text-center mx-auto">
+                <v-btn
+                  color="primary"
+                  block
+                  @click="register()"
+                  :loading="loading"
+                  >注册</v-btn
+                >
+              </div>
+            </v-form>
+            <v-card-actions></v-card-actions>
+            <div class="text-center mx-auto">
+              <v-btn color="nomary" block @click="setLoginExistState()"
+                >登陆已有帐号</v-btn
+              >
+            </div>
+          </v-sheet>
+        </v-navigation-drawer>
+      </v-row>
+    </v-main>
+  </v-app>
 </template>
 
 <script lang="ts">
@@ -104,7 +148,7 @@ export default class Register extends Vue {
   };
 
   // 控制注册页展示
-  private registerDrawer = false;
+  private registerDrawer = true;
 
   // 登录已有账号状态
   private loginExistState = false;
@@ -128,6 +172,12 @@ export default class Register extends Vue {
       color: "black",
     },
   ];
+
+  // 发送验证码倒计时
+  private countDown = 60;
+
+  // 验证码倒计时提示
+  private countDownMessage = "获取验证码";
 
   // form表单
   private valid = false;
@@ -211,31 +261,49 @@ export default class Register extends Vue {
   }
 
   // 获取手机验证码频次状态
-  private getMobileCodeState = false;
+  private getMobileCodeState = true;
+
+  // 监听手机号输入状态 判断是否可获取手机验证码
+  @Watch("mobile")
+  watchMobile() {
+    !this.mobileRegex(this.mobile)
+      ? (this.getMobileCodeState = true)
+      : (this.getMobileCodeState = false);
+  }
+
+  // 每次发送时间间隔一分钟
+  private timeDownMethod() {
+    const timeInval = window.setInterval(() => {
+      this.countDown = this.countDown - 1;
+      this.countDownMessage = `${this.countDown}s重新发送`;
+      if (this.countDown < 0) {
+        clearInterval(timeInval);
+        this.getMobileCodeState = false;
+        this.countDownMessage = "重新发送验证码";
+      }
+    }, 1000);
+  }
 
   // 获取手机验证码
   private getMobileCode() {
-    if (this.validate()) {
-      return;
-    }
+    this.countDownMessage = `${this.countDown}s重新发送`;
+    this.getMobileCodeState = true;
+    this.timeDownMethod();
   }
 
   // 登录已有账号 关闭注册页
   private setLoginExistState() {
-    this.registerDrawer = false;
-
-    // 设置已登录页面状态
-    this.$store.commit("setLoginExistState", true);
-
-    // 设置注册页面状态
-    this.$store.commit("setRegisterState", false);
-  }
-
-  // 监听注册页状态
-  @Watch("$store.getters.getRegisterState")
-  watchRegisterState() {
-    console.log("register", this.$store.getters.getRegisterState);
-    this.registerDrawer = this.$store.getters.getRegisterState;
+    this.$router.push({ path: "/Login" });
   }
 }
 </script>
+
+<style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+</style>
+

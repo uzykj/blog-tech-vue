@@ -1,7 +1,6 @@
 <template>
   <v-app id="inspire">
     <v-main>
-      <Login :propDrawer="false" />
       <Carousel />
 
       <!--热点资讯 -->
@@ -130,16 +129,12 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { Tech } from "@/interfaces/tech";
 import { nest } from "../../server";
 
-// 登录组建
-import Login from "@/views/Login.vue";
-
 // 轮播图组件
 import Carousel from "@/components/carousel/Carouse.vue";
 
 @Component({
   name: "Home",
   components: {
-    Login,
     Carousel,
   },
 })

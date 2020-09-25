@@ -56,13 +56,11 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <Login :propDrawer="barCore.login.state" />
-    <Register />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import {
   mdiCardSearch,
   mdiNewspaper,
@@ -79,18 +77,8 @@ import {
   mdiGithub,
 } from "@mdi/js";
 
-// 登录组件
-import Login from "@/views/Login.vue";
-
-// 注册组件
-import Register from "@/views/Register.vue";
-
 @Component({
   name: "Bar",
-  components: {
-    Login,
-    Register,
-  },
 })
 export default class Bar extends Vue {
   // 高亮索引
@@ -118,15 +106,10 @@ export default class Bar extends Vue {
       state: false,
       // 登录方法
       method: () => {
-        this.barCore.login.state = !this.barCore.login.state;
+        this.$router.push({ path: "Login" });
       },
     },
   };
-
-  // 控制组件隐藏和展示
-  private getDisplay(state: boolean) {
-    return state ? "flex" : "none";
-  }
 
   // 导航栏参数
   private items = [
@@ -174,13 +157,5 @@ export default class Bar extends Vue {
     { icon: this.icons.mdiLogout, text: "退出", method: () => true },
     { icon: "mdi-cog", text: "设置", method: () => true },
   ];
-
-  // 监听登录状态 控制用户头像状态
-  @Watch("$store.getters.getLoginState", { deep: true })
-  watchLoginState() {
-    this.items[0].state = !this.$store.getters.getLoginState;
-    this.items[0].display = this.getDisplay(!this.$store.getters.getLoginState);
-  }
-
 }
 </script>

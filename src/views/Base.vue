@@ -1,11 +1,17 @@
 <template>
   <v-app id="app">
+    <AppBar />
+    <Home />
     <router-view />
+    <Foot />
   </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+
+// 主页
+import Home from "@/views/Home.vue";
 
 // 左侧导航栏
 import AppBar  from "@/views/Bar.vue";
@@ -17,6 +23,7 @@ import Foot from "@/views/Foot.vue";
   name: "App",
   components: {
     AppBar,
+    Home,
     Foot
   }
 })

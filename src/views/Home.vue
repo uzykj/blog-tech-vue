@@ -5,17 +5,29 @@
 
       <!--热点资讯 -->
       <v-container>
-        <v-card class="mx-auto" style="box-shadow: none;">
+        <v-card class="mx-auto" style="box-shadow: none">
           <v-row>
             <v-col cols="12" lg="7" sm="7" md="7">
-              <v-card class="mx-auto" :height="maxHotIntoHeight" style="box-shadow: none;">
-                <v-card-title @click="1" class="title hover_title">{{hotInfo.title}}</v-card-title>
+              <v-card
+                class="mx-auto"
+                :height="maxHotIntoHeight"
+                style="box-shadow: none"
+              >
+                <v-card-title @click="1" class="title hover_title">{{
+                  hotInfo.title
+                }}</v-card-title>
                 <v-card-subtitle v-html="hotInfo.subtitle"></v-card-subtitle>
-                <v-card-subtitle class="hover_name">{{hotInfo.name}}</v-card-subtitle>
-                <v-card-subtitle>{{hotInfo.date}}</v-card-subtitle>
+                <v-card-subtitle class="hover_name">{{
+                  hotInfo.name
+                }}</v-card-subtitle>
+                <v-card-subtitle>{{ hotInfo.date }}</v-card-subtitle>
                 <v-card-text>
                   <!-- <v-card-subtitle v-html="getsHotInfo.content"></v-card-subtitle> -->
-                  <v-img class="hover_title" height="450" :src="hotInfo.imageSrc"></v-img>
+                  <v-img
+                    class="hover_title"
+                    height="450"
+                    :src="hotInfo.imageSrc"
+                  ></v-img>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -25,7 +37,7 @@
                 two-line
                 :key="i"
                 v-for="(item, i) in hotInfoList"
-                :height="maxHotIntoHeight/5"
+                :height="maxHotIntoHeight / 5"
               >
                 <v-list-item :key="item.title">
                   <v-list-item-content>
@@ -34,9 +46,11 @@
                       v-html="item.title"
                       @click="titleClick()"
                     ></v-list-item-title>
-                    <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
+                    <v-list-item-subtitle
+                      v-html="item.subtitle"
+                    ></v-list-item-subtitle>
                     <br />
-                    <v-list-item-subtitle>{{item.date}}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ item.date }}</v-list-item-subtitle>
                     <v-list-item-subtitle
                       class="hover_name"
                       @click="nameClick()"
@@ -52,7 +66,7 @@
       <!--end -->
 
       <v-container>
-        <v-card class="mx-auto" style="box-shadow: none;">
+        <v-card class="mx-auto" style="box-shadow: none">
           <v-card-title class="text-h3">最新</v-card-title>
         </v-card>
       </v-container>
@@ -64,12 +78,12 @@
         <v-lazy
           v-model="isActive"
           :options="{
-          threshold: .5
-        }"
+            threshold: 0.5,
+          }"
           min-height="200"
           transition="fade-transition"
         >
-          <v-card class="mx-auto" style="box-shadow: none;">
+          <v-card class="mx-auto" style="box-shadow: none">
             <v-card-text>
               <v-list :key="i" v-for="(item, i) in infoList" height="200">
                 <v-row>
@@ -79,9 +93,11 @@
                       v-html="item.title"
                       @click="titleClick()"
                     ></v-list-item-title>
-                    <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
+                    <v-list-item-subtitle
+                      v-html="item.subtitle"
+                    ></v-list-item-subtitle>
                     <br />
-                    <v-list-item-subtitle>{{item.date}}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ item.date }}</v-list-item-subtitle>
                     <v-list-item-subtitle
                       class="hover_name"
                       @click="nameClick()"
@@ -92,7 +108,12 @@
                     <v-sheet v-html="item.text" class="hover_title"></v-sheet>
                   </v-col>
                   <v-col cols="12" lg="4" sm="4" md="4">
-                    <v-img class="hover_title" height="150" width="350" :src="item.imageSrc"></v-img>
+                    <v-img
+                      class="hover_title"
+                      height="150"
+                      width="350"
+                      :src="item.imageSrc"
+                    ></v-img>
                   </v-col>
                 </v-row>
                 <v-divider></v-divider>
@@ -102,7 +123,10 @@
                 <v-card-text
                   class="text-center hover_load_more hover_backgroud_colr"
                   v-html="loadMoreText"
-                  @click="isShowLoad = !isShowLoad;getMoreInfo(20)"
+                  @click="
+                    isShowLoad = !isShowLoad;
+                    getMoreInfo(20);
+                  "
                 ></v-card-text>
               </v-card>
               <v-card class="text-center" height="50" :style="showLoadProcess">
@@ -140,8 +164,8 @@ import Carousel from "@/components/carousel/Carouse.vue";
 })
 export default class Home extends Vue {
   created() {
-    axios.get<Tech[]>(this.getTechUrl()).then((v) => {
-      const data = v.data;
+    axios.get<Tech>(this.getTechUrl()).then((v) => {
+      const { data } = v.data;
       const hotinfo = data.shift();
       if (hotinfo) {
         this.hotInfo = {
@@ -154,15 +178,14 @@ export default class Home extends Vue {
           text: hotinfo.text,
         };
       }
-
       // 主页侧边五条
-      this.hotInfoList = _.slice(data, 0, 5);
+      this.hotInfoList = _.slice(data, 0, 5) as never;
 
       // 轮播图数据
       this.$store.commit("setCarouseList", _.slice(data, 0, 5));
 
       // 主页剩余条数
-      this.infoList = _.slice(data, 5, data.length);
+      this.infoList = _.slice(data, 5, data.length) as never;
     });
   }
 
@@ -170,7 +193,7 @@ export default class Home extends Vue {
 
   private page = 1;
   getTechUrl(): string {
-    return `http://${nest.host}:${nest.port}/tech/get?page=${this.page}&limit=20`;
+    return `http://${nest.host}:${nest.port}/town/tech/get?page=${this.page}&limit=20`;
   }
 
   // 控制进度圈
@@ -198,7 +221,7 @@ export default class Home extends Vue {
   getMoreInfo(): void {
     this.page += 1;
     axios.get<Tech[]>(this.getTechUrl()).then(({ data }) => {
-      this.infoList = [...this.infoList, ...data];
+      this.infoList = [...this.infoList, ...data] as never;
       this.isShowLoad = !this.isShowLoad;
     });
   }
@@ -227,9 +250,9 @@ export default class Home extends Vue {
   };
 
   // 热点咨询侧列表
-  private hotInfoList: Array<Tech> = [];
+  private hotInfoList = [];
 
   // 资讯列表
-  private infoList: Array<Tech> = [];
+  private infoList = [];
 }
 </script>
